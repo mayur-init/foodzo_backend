@@ -2,5 +2,6 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 module.exports = {
-	PORT
+	PORT,
+	DEBUG_MODE
 } = process.env;

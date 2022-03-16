@@ -1,5 +1,5 @@
 const config = require('../config');
-//import { ValidationError } from 'joi';
+const  { ValidationError } = require('joi');   //joi is a validation library
 const ErrorHandler = require('../errors/ErrorHandler');
 
 const errorHandler = (err, req, res, next) => {

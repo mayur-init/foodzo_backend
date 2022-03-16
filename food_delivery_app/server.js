@@ -5,11 +5,13 @@ const mainRouter = require('./routes')
 const errorHandler = require('./middlewares/errorHandler');
 const app = express();
 
+//data base connection
+
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
-app.use(errorHandler);
-app.use(mainRouter);
 app.use(express.json());
+app.use('/api',mainRouter);
+app.use(errorHandler);
 
 
 

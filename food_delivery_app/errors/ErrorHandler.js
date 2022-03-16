@@ -1,4 +1,5 @@
 class ErrorHandler extends Error{
+
     constructor(status, msg) {
         this.status = status;
         this.message = msg;
@@ -8,7 +9,7 @@ class ErrorHandler extends Error{
         return new ErrorHandler(422, message);
     }
 
-    static notFound(message = '404 Not Found') {
+    static notFoundError(message = '404 Not Found') {
         return new ErrorHandler(404, message);
     }   
     static serverError(message = 'Internal server error') {
