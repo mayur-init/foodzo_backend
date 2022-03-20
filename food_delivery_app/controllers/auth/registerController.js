@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const {User} = require('../../models');
+const ErrorHandler = require('../../errors/ErrorHandler');
 
 const registerController = {
 
@@ -20,16 +21,8 @@ const registerController = {
 
         //check if the user is in the data base -- data base integration
 
-        try {
-        const exist = await User.exists({ email: req.body.email });
-            if (exist) {
-                return next(CustomErrorHandler.alreadyExist('This email is already taken.'));
-            }
-        } catch(err) {
-            return next(err);
-    }
 
-        res.send('Hello from Express...');
+        res.send('Hello form express...');
 	}
 }
 
