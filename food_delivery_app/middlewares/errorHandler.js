@@ -1,6 +1,6 @@
 const config = require('../config');
 const  { ValidationError } = require('joi');   //joi is a validation library
-const ErrorHandler = require('../errors/ErrorHandler');
+const ErrorHandler = require('../services/ErrorHandler');
 
 const errorHandler = (err, req, res, next) => {
     let statusCode = 500;

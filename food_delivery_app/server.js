@@ -8,7 +8,7 @@ const app = express();
 
 //data base connection
 mongoose.connect(config.DB_URL, {
-    useNewUrlParser: true,
+    useNewUrlParser: true, 
     useUnifiedTopology: true,
 });
 const db = mongoose.connection;

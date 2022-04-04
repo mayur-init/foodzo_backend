@@ -3,5 +3,7 @@ dotenv.config();
 
 module.exports = {
 	PORT,
-	DEBUG_MODE
+	DEBUG_MODE,
+	DB_URL,
+	JWT_SECRET
 } = process.env;

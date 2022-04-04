@@ -1,6 +1,8 @@
 const Joi = require('joi');
+const bcrypt = require('bcrypt');
 const {User} = require('../../models');
-const ErrorHandler = require('../../errors/ErrorHandler');
+const ErrorHandler = require('../../services/ErrorHandler');
+const JwtService = require('../../services/JwtService');
 
 const registerController = {
 
@@ -19,10 +21,46 @@ const registerController = {
             return next(error);
         }
 
-        //check if the user is in the data base -- data base integration
+    // check if user is in the database already
+    try {
+        const exist = await User.exists({ email: req.body.email });
+        if (exist) {
+            return next(ErrorHandler.alreadyExist('This email is already taken.'));
+        }
+    } catch(err) {
+        return next(err);
+    }
+    const { name, email, password } = req.body;
+    
 
+    //hashing password.body
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-        res.send('Hello form express...');
+    // prepare the model
+    const user = new User({
+        name,
+        email,
+        password: hashedPassword
+    });
+
+    let access_token;
+    let refresh_token;
+    try {
+        const result = await user.save();
+        console.log(result);
+
+        // Token
+        access_token = JwtService.sign({ _id: result._id, role: result.role });
+        //refresh_token = JwtService.sign({ _id: result._id, role: result.role }, '1y', REFRESH_SECRET);
+        // database whitelist
+        //await RefreshToken.create({ token: refresh_token });
+    } catch(err) {
+        
+        console.log(err)
+        return next(err);
+    }
+
+        res.json({access_token: access_token});
 	}
 }
 
