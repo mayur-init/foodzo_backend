@@ -3,7 +3,7 @@ const path = require('path');
 const config = require('./config');
 const mainRouter = require('./routes');
 const mongoose = require('mongoose');
-const errorHandler = require('./middlewares/errorHandler');
+const {errorHandler} = require('./middlewares');
 const app = express();
 
 //data base connection
