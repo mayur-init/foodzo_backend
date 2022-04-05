@@ -13,6 +13,7 @@ const loginController = {
         const loginSchema = Joi.object({
             email: Joi.string().email().required(),
             password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
+            refresh_token: Joi.string().required(),
         });
         const { error } = loginSchema.validate(req.body);
 
@@ -20,12 +21,13 @@ const loginController = {
             return next(error);
         }
 
-        //checking if the user is not in db
+          //checking if the user is not in db
          try{
             const user = await User.findOne({ email: req.body.email });
             if (!user) {
                 return next(ErrorHandler.wrongCredentials());
             }
+
             // compare the password using bcrypt
             const correctPassword = await bcrypt.compare(req.body.password, user.password);
             if (!correctPassword) {
@@ -36,6 +38,9 @@ const loginController = {
             const access_token = JwtService.sign({ _id: user._id, role: user.role });
             const refresh_token = JwtService.sign({ _id: user._id, role: user.role }, '1y', config.REFRESH_SECRET);
 
+            //deleting old refresh_token
+            await RefreshToken.deleteOne({token: req.body.refresh_token});
+            
             // db whitelist refresh_tokens
             await RefreshToken.create({ token: refresh_token });
 

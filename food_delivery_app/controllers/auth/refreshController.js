@@ -44,6 +44,9 @@ const refreshController = {
         	const access_token = JwtService.sign({ _id: user._id, role: user.role });
             const refresh_token = JwtService.sign({ _id: user._id, role: user.role }, '1y', config.REFRESH_SECRET);
 
+            //deleting old refresh_token
+            await RefreshToken.deleteOne({token: req.body.refresh_token});
+            
             // db whitelist refresh_tokens
             await RefreshToken.create({ token: refresh_token });
 

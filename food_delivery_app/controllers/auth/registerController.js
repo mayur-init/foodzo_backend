@@ -59,7 +59,7 @@ const registerController = {
         await RefreshToken.create({ token: refresh_token });
     } catch(err) {
         
-        console.log(err)
+        //console.log(err)
         return next(err);
     }
 
