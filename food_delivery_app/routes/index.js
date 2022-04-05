@@ -8,5 +8,7 @@ router.post('/register', registerController.register);
 router.post('/login', loginController.login);
 router.get('/user', auth, userController.user);
 router.post('/refresh', refreshController.refresh);
+router.post('/logout', auth, loginController.logout);
+
 
 module.exports = router;
