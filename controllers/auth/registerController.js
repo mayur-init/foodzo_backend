@@ -33,23 +33,25 @@ const registerController = {
         return next(err);
     }
     const { name, email, password } = req.body;
-    
 
     //hashing password.body
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // prepare the model
-    const user = new User({
-        name,
-        email,
-        password: hashedPassword
-    });
-
     let access_token;
     let refresh_token;
-    try {
-        const result = await user.save();
+
+    // prepare the model
+        const user = new User({
+            name,
+            email,
+            password: hashedPassword,
+            refresh_token: null
+        });
+
+      const result = await user.save();
         //console.log(result);
+
+    try {
 
         // Token
         access_token = JwtService.sign({ _id: result._id, role: result.role });
@@ -57,6 +59,9 @@ const registerController = {
 
         // db whitelist refresh_tokens
         await RefreshToken.create({ token: refresh_token });
+
+        //updating old refresh_token
+            await User.updateOne({_id: user._id}, {$set: {refresh_token: refresh_token}});
     } catch(err) {
         
         //console.log(err)

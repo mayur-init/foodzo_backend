@@ -13,7 +13,6 @@ const loginController = {
         const loginSchema = Joi.object({
             email: Joi.string().email().required(),
             password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
-            refresh_token: Joi.string().required(),
         });
         const { error } = loginSchema.validate(req.body);
 
@@ -38,11 +37,14 @@ const loginController = {
             const access_token = JwtService.sign({ _id: user._id, role: user.role });
             const refresh_token = JwtService.sign({ _id: user._id, role: user.role }, '1y', config.REFRESH_SECRET);
 
-            //deleting old refresh_token
-            await RefreshToken.deleteOne({token: req.body.refresh_token});
-            
-            // db whitelist refresh_tokens
+             //deleting old refresh_token
+            await RefreshToken.deleteOne({token: user.refresh_token});
+
+             // db whitelist refresh_tokens
             await RefreshToken.create({ token: refresh_token });
+
+            //updating old refresh_token
+            await User.updateOne({_id: user._id}, {$set: {refresh_token: refresh_token}});
 
             res.json({access_token, refresh_token});
 		}catch(err){

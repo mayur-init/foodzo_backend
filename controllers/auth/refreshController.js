@@ -50,6 +50,9 @@ const refreshController = {
             // db whitelist refresh_tokens
             await RefreshToken.create({ token: refresh_token });
 
+            //updating old refresh_token
+            await User.updateOne({_id: user._id}, {$set: {refresh_token: refresh_token}});
+
             res.json({access_token, refresh_token});
 
         }catch(err){
