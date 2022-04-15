@@ -1,5 +1,5 @@
 {
-  "name": "foodzo_server",
+  "name": "food_delivery_app",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
