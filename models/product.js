@@ -8,7 +8,11 @@ const productSchema = new Schema({
     description: String,
     imgUrl: {type:String, required:true},
     price: {type:Currency, required:true, min:0},
-    isVeg: {type: Boolean, required: true}
+    isVeg: {type: Boolean, required: true},
+    creator: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }
 }, { timestamps:true });
 
 module.exports = mongoose.model('Product', productSchema);

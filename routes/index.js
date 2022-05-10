@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const {auth} = require('../middlewares');
+const upload = require('../services/multer');
 const {registerController, loginController, userController, refreshController, productController} = require('../controllers');
 
 
@@ -14,9 +15,9 @@ router.post('/logout', auth, loginController.logout);
 
 //product related routes
 router.get('/products', productController.getProducts);
-router.post('/products', /*auth,*/ productController.addProduct);
+router.post('/products', /*auth,*/upload.single('image'), productController.addProduct);
 router.get('/products/:productId', productController.viewProduct);
-router.put('/products/:productId', /*auth,*/ productController.updateProduct);
+router.put('/products/:productId', /*auth,*/upload.single('image'), productController.updateProduct);
 router.delete('/products/:productId', /*auth,*/ productController.removeProduct);
 
 

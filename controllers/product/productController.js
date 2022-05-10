@@ -17,15 +17,21 @@ exports.getProducts = async (req, res, next) => {
 // to add a new product
 exports.addProduct = async (req, res, next) => {
     try{
+        
         const name = req.body.name;
         const description = req.body.discription;
-        const imgUrl = req.body.imgUrl;
+        const image = req.file;
         const price = req.body.price;
         const isVeg = req.body.isVeg;
+
+        //if file not set
+        if(!image){
+            res.status(422).json({msg: 'image not uploaded', status: 'fail'});
+        }
         const product = new Product({
             name: name,
             description: description,
-            imgUrl: imgUrl,
+            imgUrl: image.path,
             price: price,
             isVeg: isVeg
         });
@@ -54,10 +60,23 @@ exports.viewProduct = async (req, res, next) => {
 // to update a product
 exports.updateProduct = async (req, res, next) => {
     try {
-        const product = await Product.findByIdAndUpdate(req.params.productId, {
-           $set: req.body 
-        }, { new: true });
-        res.status(200).json({status: "success", msg: "Product Updated"});
+        const productId = req.params.productId;
+        const updatedName = req.body.name;
+        const updatedDescription = req.body.description;
+        const image = req.file;
+        const updatedPrice = req.body.price;
+        const updatedIsVeg = req.body.isVeg;
+
+        const product = await Product.findById(productId);
+        product.name = updatedName;
+        product.description = updatedDescription;
+        product.price = updatedPrice;
+        product.isVeg = updatedIsVeg;
+        if(image)
+            product.imgUrl = image.path;
+        
+        const updatedProduct = await product.save();
+        res.status(200).json({status: success}); 
     }
     catch(err){
         return next(err);
