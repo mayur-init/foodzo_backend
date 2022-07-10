@@ -8,6 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const cors = require('cors');
 
+
 //data base connection
 mongoose.connect(config.DB_URL, {
     useNewUrlParser: true, 
@@ -19,17 +20,12 @@ db.once('open', () => {
     console.log('DB connected...');
 });
 
-app.use(cors({
-    origin: 'http://localhost:3000/'
-}));
+app.use(cors());
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.json());
 app.use('/api',mainRouter);
 app.use(errorHandler);
-
-
-
 
 
 app.listen(PORT, () => {console.log(`Listening on port ${PORT}...`)});
