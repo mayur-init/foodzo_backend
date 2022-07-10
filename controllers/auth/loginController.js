@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const {User, RefreshToken} = require('../../models');
 const config = require('../../config');
 const JwtService = require('../../services/JwtService');
