@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const {errorHandler} = require('./middlewares');
 const app = express();
 const PORT = process.env.PORT || 5000;
+const cors = require('cors');
 
 //data base connection
 mongoose.connect(config.DB_URL, {
@@ -18,7 +19,9 @@ db.once('open', () => {
     console.log('DB connected...');
 });
 
-
+app.use(cors({
+    origin: 'http://localhost:3000/'
+}));
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.json());
